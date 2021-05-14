@@ -1,27 +1,17 @@
 # Coding Challenge Backend
-Bem vindo! Se você está aqui é porque gostamos do seu perfil e queremos conhecer um pouco mais sobre suas habilidades como desenvolvedor.
 
-# Pré-requisitos
-* Java 11
-* Maven
-* Git
-* Intellij, Visual Studio Code, Eclipse ou a IDE de sua preferência
 
-# Critérios de avaliação
-* Compreensão dos requistos
-* Fornecer documentação explicando como rodar e testar localmente
-* Engenharia de Software
-* Cobertura de Testes
-* Versionamento
-* Arquitetura do Código
-* Separação de Responsabilidades
-* Manutenabilidade
-* Modelagem de dados (Estruturas de dados utilizadas, etc)
+# Sobre o projeto - Configurações necessárias
+Para melhorar a perfomance do consumo da api optei pelo cache, utilizando o Redis para melhor desempenho. 
+No arquivo: aplication.properties, está definido :
+spring.cache.type=redis
+spring.redis.host=localhost
+spring.redis.port=6379
 
-# Sobre o projeto
-Esse projeto é uma API REST com SpringBoot, Maven em JAVA 11 usando uma adaptação do modelo 'Clean Architecture'.
+Portanto, vamos rodar o Redis com o Docker. Criando um container:
+                            (port forwarding)   (versão redis)
+docker run -it --name redis -p 6379:6379 redis: 5.0.3
 
-O endpoint exposto(/agencies) retorna uma lista com informações de todas as agências da instituição bancária "Banco do Brasil" de toda a extensão nacional.
+Caso seja preferível rodar sem o redis, somente local, é necessário comentar ou excluir as propriedades definidas no aplication.properties.
 
-Dados obtidos através do Portal de Dados do Banco Central do Brasil:
-https://dadosabertos.bcb.gov.br/dataset/agencias
+Porta da aplicação:  8080
