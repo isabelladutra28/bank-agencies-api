@@ -12,6 +12,20 @@ public class AgencyResponse implements Serializable {
     private String bank;
     private String city;
     private String state;
+    
+    
+    public AgencyResponse() {
+        
+		
+    }
+    
+    public AgencyResponse(String name, String bank, String city, String state) {
+    	this.name = name;
+    	this.bank = bank;
+    	this.city = city;
+    	this.state = state;
+    			
+    }
 
     public String getName() {
         return name;

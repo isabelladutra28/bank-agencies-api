@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.apache.commons.collections4.CollectionUtils;
+
+
 
 import java.io.IOException;
 import java.net.URI;
@@ -17,7 +20,9 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class AgenciesGatewayImpl implements AgenciesGateway {
@@ -52,6 +57,38 @@ public class AgenciesGatewayImpl implements AgenciesGateway {
                 JsonNode parent = mapper.readTree(response.body());
                 String content = parent.get("value").toString();
                 return Arrays.asList(mapper.readValue(content, AgencyGatewayResponse[].class));
+            }
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException("Error when trying get all Agencies from API");
+        }
+
+        return Collections.emptyList();
+    }
+    
+    @Override
+    public List<AgencyGatewayResponse> findAgenciesByState(String state) {
+
+        URI apiURI = UriComponentsBuilder
+                .fromUriString(baseUrl)
+                .queryParam("$format", "json")
+                .build().toUri();
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .GET()
+                .uri(apiURI)
+                .build();
+
+        try {
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+       
+        
+            if (response.statusCode() == HttpStatus.OK.value()) {
+                JsonNode parent = mapper.readTree(response.body());
+                String content = parent.get("value").toString();
+                List<AgencyGatewayResponse> responseFilter =  Arrays.asList(mapper.readValue(content, AgencyGatewayResponse[].class)).stream()
+                	    .filter(p -> p.getState().equals(state)).collect(Collectors.toList());
+                  Collections.sort(responseFilter, Comparator.comparing(AgencyGatewayResponse::getCity));
+                return responseFilter;
             }
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException("Error when trying get all Agencies from API");

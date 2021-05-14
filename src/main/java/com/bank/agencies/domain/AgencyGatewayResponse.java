@@ -17,6 +17,19 @@ public class AgencyGatewayResponse implements Serializable {
     private String city;
     @JsonProperty("UF")
     private String state;
+    
+    public AgencyGatewayResponse() {
+    
+    			
+    }
+    
+    public AgencyGatewayResponse(String name, String bank, String city, String state) {
+    	this.name = name;
+    	this.bank = bank;
+    	this.city = city;
+    	this.state = state;
+    			
+    }
 
     public String getName() {
         return name;
@@ -49,6 +62,10 @@ public class AgencyGatewayResponse implements Serializable {
     public void setState(String state) {
         this.state = state;
     }
+    
+ 
+    
+ 
 
 
     public static final class AgencyGatewayResponseBuilder {
