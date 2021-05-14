@@ -3,7 +3,10 @@
     import com.bank.agencies.domain.AgencyGatewayResponse;
     import com.bank.agencies.domain.AgencyResponse;
     import com.bank.agencies.usecase.FindAllAgenciesUseCase;
-    import org.springframework.http.HttpStatus;
+
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpStatus;
     import org.springframework.http.MediaType;
     import org.springframework.http.ResponseEntity;
     import org.springframework.web.bind.annotation.*;
@@ -15,6 +18,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
     @RestController
+    @Cacheable("agencies")
     @RequestMapping(value = "/agencies", produces = MediaType.APPLICATION_JSON_VALUE)
     public class AgenciesController {
 
@@ -34,7 +38,7 @@ import java.util.stream.Collectors;
                     .map(agencyGateway -> AgencyResponse.AgencyResponseBuilder.anAgencyResponse()
                     .bank(agencyGateway.getBank())
                     .city(agencyGateway.getCity())
-                    .name(agencyGateway.getName())
+                   .name(agencyGateway.getName())
                     .state(agencyGateway.getState()).build())
                     .collect(Collectors.toList());
 
@@ -50,16 +54,17 @@ import java.util.stream.Collectors;
             
             List<AgencyResponse> agencyResponse = agencies.stream()
                     .map(agencyGateway -> AgencyResponse.AgencyResponseBuilder.anAgencyResponse()
-                    .bank(agencyGateway.getBank())
-                    .city(agencyGateway.getCity())
-                    .name(agencyGateway.getName())
-                    .state(agencyGateway.getState()).build())
-                    .collect(Collectors.toList());
+                    		 .bank(agencyGateway.getBank())
+                             .city(agencyGateway.getCity())
+                             .name(agencyGateway.getName())
+                             .state(agencyGateway.getState()).build())
+                             .collect(Collectors.toList());
 
             return new ResponseEntity<>(agencyResponse, HttpStatus.OK);
         }
         
-  @GetMapping("/group")     
+  @GetMapping("/group") 
+  @CacheEvict("agencies")
   @ResponseStatus(HttpStatus.OK)
         public ResponseEntity<Map<String, List<AgencyResponse>>> GroupAgenciesByState() {
 

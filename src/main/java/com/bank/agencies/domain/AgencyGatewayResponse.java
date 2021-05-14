@@ -1,22 +1,30 @@
 package com.bank.agencies.domain;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.io.Serializable;
+
+import lombok.Data;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AgencyGatewayResponse implements Serializable {
 
     private static final long serialVersionUID = -1491071762041597641L;
 
+    
     @JsonProperty("NomeAgencia")
     private String name;
+
     @JsonProperty("NomeIf")
     private String bank;
+  
     @JsonProperty("Municipio")
     private String city;
+  
     @JsonProperty("UF")
     private String state;
+    
     
     public AgencyGatewayResponse() {
     
